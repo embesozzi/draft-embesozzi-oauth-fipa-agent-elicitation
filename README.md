@@ -1,9 +1,9 @@
 # OAuth 2.0 Native Authorization via MCP Elicitation
 
-**Document:** `draft-embesozzi-oauth-fipa-mcp-elicitation`
-**Status:** Individual Submission — Informational
-**Author:** Martin Besozzi (TwoGenIdentity)
-**Date:** 2026-03-09
+**Document:** `draft-embesozzi-oauth-fipa-mcp-elicitation`  
+**Status:** Individual Submission — Informational  
+**Author:** Martin Besozzi (TwoGenIdentity)  
+**Date:** 2026-03-09  
 
 ## Abstract
 
