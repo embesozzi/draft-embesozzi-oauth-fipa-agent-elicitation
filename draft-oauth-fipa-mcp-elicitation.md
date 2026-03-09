@@ -49,27 +49,30 @@ informative:
     author:
       org: FIDO Alliance
 
-abstract: |
-  The OAuth 2.0 First-Party Applications (FiPA) specification defines a
-  challenge/response protocol enabling API-native authentication without browser
-  redirects.  FiPA intentionally leaves authenticator metadata out of scope: the
-  format in which the authorization server describes available authenticators and
-  the inputs they require is undefined.  This gap prevents interoperable
-  implementation by AI Agents, CLI tools, and autonomous agents.
+---
 
-  This document proposes an extension to FiPA that adopts MCP Elicitation as the
-  standard metadata language for FiPA challenges.  The scope covers two strong
-  authenticator types: Authenticator Apps (TOTP) and Passkeys (WebAuthn).
-  Password authentication is explicitly out of scope.  The same pattern is
-  extensible to other authenticator types by defining additional requestedSchema
-  structures.
+--- abstract
 
-  The extension is analyzed across two deployment types: Third-Party AI Agents
-  (e.g., Claude, GitHub Copilot), where the MCP client is provided by a third
-  party and cannot be modified; and First-Party AI Agents, where the implementer
-  controls the agent code.  Both deployment types share the same FiPA
-  challenge/response wire format and MCP Elicitation protocol, differing only in
-  Passkey handling.
+The OAuth 2.0 First-Party Applications (FiPA) specification defines a
+challenge/response protocol enabling API-native authentication without browser
+redirects.  FiPA intentionally leaves authenticator metadata out of scope: the
+format in which the authorization server describes available authenticators and
+the inputs they require is undefined.  This gap prevents interoperable
+implementation by AI Agents, CLI tools, and autonomous agents.
+
+This document proposes an extension to FiPA that adopts MCP Elicitation as the
+standard metadata language for FiPA challenges.  The scope covers two strong
+authenticator types: Authenticator Apps (TOTP) and Passkeys (WebAuthn).
+Password authentication is explicitly out of scope.  The same pattern is
+extensible to other authenticator types by defining additional requestedSchema
+structures.
+
+The extension is analyzed across two deployment types: Third-Party AI Agents
+(e.g., Claude, GitHub Copilot), where the MCP client is provided by a third
+party and cannot be modified; and First-Party AI Agents, where the implementer
+controls the agent code.  Both deployment types share the same FiPA
+challenge/response wire format and MCP Elicitation protocol, differing only in
+Passkey handling.
 
 --- middle
 
