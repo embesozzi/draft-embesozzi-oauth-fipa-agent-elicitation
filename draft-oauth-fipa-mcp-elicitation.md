@@ -50,8 +50,6 @@ informative:
       org: FIDO Alliance
 ---
 
-## Abstract
-
 The OAuth 2.0 First-Party Applications (FiPA) specification defines a challenge/response protocol enabling API-native authentication without browser redirects. FiPA intentionally leaves authenticator metadata out of scope: the format in which the authorization server describes available authenticators and the inputs they require is undefined. This gap prevents interoperable implementation by AI Agents, CLI tools, and autonomous agents.
 
 This document proposes an extension to FiPA that adopts **MCP Elicitation** as the standard metadata language for FiPA challenges. The scope covers two strong authenticator types: Authenticator Apps (TOTP) and Passkeys (WebAuthn). Password authentication is explicitly out of scope. The same pattern is extensible to other authenticator types by defining additional `requestedSchema` structures.
@@ -63,7 +61,7 @@ The extension is analyzed across two deployment types that have materially diffe
 
 The two deployment types share the same FiPA challenge/response wire format and the same MCP Elicitation protocol. They differ only in what the MCP client can do with a Passkey elicitation: Third-Party clients fall back to URL mode (out-of-band browser); First-Party clients can perform the WebAuthn ceremony in-band using challenge metadata delivered through MCP Elicitation extensions.
 
----
+--- middle
 
 ## 1. Introduction
 
@@ -110,8 +108,6 @@ The MCP client is an agent the implementer builds and controls. It can implement
 
 For Passkeys, the agent can perform the WebAuthn ceremony in-band, with challenge parameters delivered through a FiPA extension to the MCP form mode `requestedSchema`. No browser redirect is required.
 
----
-
 ## 2. Conventions and Definitions
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -141,8 +137,6 @@ This document uses terminology defined in [RFC6749], [FiPA], and
   to the authorization server carrying an `auth_session` and
   credential response, as defined in [FiPA].
 
----
-
 ## 3. Protocol Overview
 
 This extension operates within the FiPA challenge/response cycle defined in [FiPA]. A FiPA authorization request that requires additional authentication receives an Authorization Challenge Response:
@@ -167,8 +161,6 @@ MCP Elicitation defines two modes used by this extension:
 - **URL mode** — out-of-band interaction. The server provides a URL the MCP client opens in a browser or webview. The result is submitted externally; the MCP response carries only an `action`.
 
 For URL mode, `mode` and `elicitationId` are REQUIRED in the `elicitation/create` params. URL mode responses carry no `content` — the interaction result is submitted directly from the browser context to the authorization server.
-
----
 
 ## 4. Elicitation Extension
 
@@ -203,8 +195,6 @@ WWW-Authenticate: Bearer realm="authorization-server",
                   error="insufficient_scope",
                   auth_session="sess_abc123"
 ```
-
----
 
 ## 5. Authenticator Selection
 
@@ -297,8 +287,6 @@ Content-Type: application/json
 }
 ```
 
----
-
 ## 6. TOTP Challenge
 
 TOTP works identically for both Third-Party and First-Party AI Agents. Form mode is sufficient: the challenge is a 6-digit numeric code, expressible as a plain string with `pattern` and length constraints.
@@ -390,8 +378,6 @@ Content-Type: application/json
 
 On success, the authorization server issues an OAuth token with the authenticated ACR value, per [FiPA].
 
----
-
 ## 7. Passkey Challenge — Third-Party AI Agent
 
 In a Third-Party AI Agent, the MCP client is a product the implementer does not control. It supports standard MCP Elicitation form mode and URL mode but cannot be extended with custom format handling or WebAuthn API invocation.
@@ -462,8 +448,6 @@ Once the browser opens the URL, the WebAuthn ceremony is handled entirely betwee
 | Context switch | User leaves the AI Agent interface to complete the ceremony. |
 | Out-of-band result | The WebAuthn assertion does not transit the MCP channel. The MCP server MUST poll the authorization server (per [RFC8628] or [CIBA]) until the ceremony completes and a token is issued. |
 
----
-
 ## 8. Passkey Challenge — First-Party AI Agent
 
 In a First-Party AI Agent, the implementer controls the agent code. The agent can implement custom elicitation handling, including native WebAuthn API invocation using the OS or platform FIDO2 APIs ([FIDO-CTAP]). The WebAuthn ceremony is performed in-band: no browser, no redirect.
@@ -504,6 +488,8 @@ TODO
 
 TODO Security
 
+--- back
+
 ## 11. References
 
 ### 11.1 Normative References
@@ -515,10 +501,6 @@ TODO Security
 - [MCP-Elicitation] Anthropic, "Model Context Protocol Specification — Elicitation". https://spec.modelcontextprotocol.io
 - [WebAuthn] W3C, "Web Authentication: An API for accessing Public Key Credentials, Level 3". https://www.w3.org/TR/webauthn/
 
-### 12.2 Informative References
+### 11.2 Informative References
 
 - [FIDO-CTAP] FIDO Alliance, "Client to Authenticator Protocol (CTAP) 2.2". https://fidoalliance.org/specs/fido-v2.2-rd-20230321/fido-client-to-authenticator-protocol-v2.2-rd-20230321.html
-
----
-
-*This document is an independent submission Internet-Draft for community discussion. It is not an IETF or OpenID Foundation standards-track document. Feedback is welcome via PR.*
