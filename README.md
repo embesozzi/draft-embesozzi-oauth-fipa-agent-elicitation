@@ -18,27 +18,17 @@ standard metadata language for FiPA authenticator challenges, covering
 TOTP and Passkey (WebAuthn) authenticator types across Third-Party and
 First-Party AI Agent deployments.
 
-## Document Structure
+## Documents
 
-| Section | Topic |
-|---|---|
-| §1 Introduction | Applicability, Limitations, Deployment Types |
-| §2 Conventions and Definitions | RFC 2119 keywords, Terminology |
-| §3 Protocol Overview | FiPA challenge/response + MCP Elicitation modes |
-| §4 Elicitation Extension | `elicitations` array, sequencing, wire format, non-MCP fallback |
-| §5 Authenticator Selection | Method selection elicitation |
-| §6 TOTP Challenge | Form mode TOTP flow |
-| §7 Passkey — Third-Party Agent | URL mode (out-of-band), limitations |
-| §8 Passkey — First-Party Agent | In-band WebAuthn via `format: webauthn-get` |
-| §10 Security Considerations | OTP exposure, challenge binding, phishing |
-| §11 References | Normative and Informative |
+| Document | Link |
+|----------|------|
+| **Draft** | [draft-oauth-fipa-mcp-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-mcp-elicitation/draft-oauth-fipa-mcp-elicitation.html) |
 
-## Related Work
+## Versions
 
-- [OAuth 2.0 First-Party Applications (FiPA)](https://datatracker.ietf.org/doc/draft-ietf-oauth-first-party-apps/)
-- [MCP Elicitation Specification](https://spec.modelcontextprotocol.io)
-- [RFC 6749 — OAuth 2.0](https://www.rfc-editor.org/rfc/rfc6749)
-- [W3C Web Authentication (WebAuthn) Level 3](https://www.w3.org/TR/webauthn/)
+| Date | Link |
+|------|------|
+| **Latest** | [Editor's Copy](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-mcp-elicitation/draft-oauth-fipa-mcp-elicitation.html) |
 
 ## Contributing
 
