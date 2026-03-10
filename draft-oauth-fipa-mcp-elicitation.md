@@ -6,6 +6,7 @@ date: 2026-03-09
 category: info
 submissiontype: independent
 ipr: trust200902
+v: 3
 
 area: Security
 workgroup: Independent Submission
@@ -50,7 +51,8 @@ informative:
     author:
       org: FIDO Alliance
 
----
+...
+
 --- abstract
 
 The OAuth 2.0 First-Party Applications (FiPA) specification defines a
