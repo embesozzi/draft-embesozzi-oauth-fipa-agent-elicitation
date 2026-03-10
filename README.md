@@ -10,12 +10,11 @@
 The OAuth 2.0 First-Party Applications (FiPA) specification defines a
 challenge/response protocol enabling API-native authentication without
 browser redirects. FiPA intentionally leaves authenticator metadata out
-of scope. This gap prevents interoperable implementation by AI Agents,
-CLI tools, and autonomous agents.
+of scope. This gap prevents interoperable implementation by AI Agents.
 
 This document proposes an extension that adopts MCP Elicitation as the
 standard metadata language for FiPA authenticator challenges, covering
-TOTP and Passkey (WebAuthn) authenticator types across Third-Party and
+TOTP, Passkey (WebAuthn) and extended to other authenticator types across Third-Party and
 First-Party AI Agent deployments.
 
 ## Documents
