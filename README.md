@@ -35,7 +35,7 @@ differing only in Passkey handling.
 
 | Document | Link |
 |----------|------|
-| **Draft** | [draft-oauth-fipa-agent-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-mcp-elicitation/draft-oauth-fipa-agent-elicitation.html) |
+| **Draft** | [draft-oauth-fipa-agent-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
 
 ## Versions
 
