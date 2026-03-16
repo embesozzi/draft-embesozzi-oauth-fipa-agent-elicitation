@@ -22,12 +22,6 @@ behalf.  The scope covers two strong authenticator types: Authenticator Apps
 (TOTP) and Passkeys (WebAuthn).  Password authentication is explicitly out of
 scope.  The same pattern is extensible to other authenticator types by defining
 additional  requestedSchema  structures. 
-       The extension is specified across two deployment types: Third-Party AI Agents
-(e.g., Claude, GitHub Copilot), where the client runtime is provided by a
-third party and cannot be modified; and First-Party AI Agents, where the
-implementer controls the agent code.  Both deployment types share the same
-FiPA challenge/response wire format and Structured Elicitation protocol,
-differing only in Passkey handling. 
     " name="description">
 <meta content="xml2rfc 3.32.0" name="generator">
 <meta content="draft-embesozzi-oauth-fipa-agent-elicitation" name="ietf.draft">
@@ -1114,12 +1108,6 @@ behalf.  The scope covers two strong authenticator types: Authenticator Apps
 (TOTP) and Passkeys (WebAuthn).  Password authentication is explicitly out of
 scope.  The same pattern is extensible to other authenticator types by defining
 additional <code>requestedSchema</code> structures.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">The extension is specified across two deployment types: Third-Party AI Agents
-(e.g., Claude, GitHub Copilot), where the client runtime is provided by a
-third party and cannot be modified; and First-Party AI Agents, where the
-implementer controls the agent code.  Both deployment types share the same
-FiPA challenge/response wire format and Structured Elicitation protocol,
-differing only in Passkey handling.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1242,46 +1230,32 @@ differing only in Passkey handling.<a href="#section-abstract-2" class="pilcrow"
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-7-passkey-challenge-third-p" class="internal xref">7. Passkey Challenge — Third-Party AI Agent</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-7-passkey-challenge" class="internal xref">7. Passkey Challenge</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-71-authorization-challenge-" class="internal xref">7.1 Authorization Challenge Response</a></p>
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-71-webauthn-challenge-deliv" class="internal xref">7.1 WebAuthn Challenge Delivery</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-72-out-of-band-completion" class="internal xref">7.2 Out-of-Band Completion</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
-                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-73-limitations" class="internal xref">7.3 Limitations</a></p>
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-72-authorization-challenge-" class="internal xref">7.2 Authorization Challenge Response</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-8-passkey-challenge-first-p" class="internal xref">8. Passkey Challenge — First-Party AI Agent</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-81-webauthn-challenge-deliv" class="internal xref">8.1 WebAuthn Challenge Delivery</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-82-authorization-challenge-" class="internal xref">8.2 Authorization Challenge Response</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-8-security-considerations" class="internal xref">8. Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-10-security-considerations" class="internal xref">10. Security Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-references" class="internal xref">References</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
-                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
-                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
             </ul>
 </li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1362,16 +1336,12 @@ the scope of this specification.<a href="#section-1.2-3" class="pilcrow">¶</a><
 <p id="section-1.3-1">This document does not define:<a href="#section-1.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1.3-2.1">
-            <p id="section-1.3-2.1.1">Password authentication. Password credentials MUST NOT be included in the
-<code>elicitations</code> array.<a href="#section-1.3-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-2.1.1">Capability negotiation between the agent runtime and the authorization
+server. Implementations MUST use application-specific mechanisms until FiPA
+defines a negotiation mechanism.<a href="#section-1.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-1.3-2.2">
-            <p id="section-1.3-2.2.1">Capability negotiation between the agent runtime and the authorization
-server. Implementations MUST use application-specific mechanisms until FiPA
-defines a negotiation mechanism.<a href="#section-1.3-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-1.3-2.3">
-            <p id="section-1.3-2.3.1">Changes to the FiPA wire format beyond the <code>elicitations</code> array extension.<a href="#section-1.3-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-1.3-2.2.1">Changes to the FiPA wire format beyond the <code>elicitations</code> array extension.<a href="#section-1.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1448,16 +1418,6 @@ extensions.<a href="#section-2.1-2.4.1" class="pilcrow">¶</a></p>
             <p id="section-2.1-2.5.1"><strong>Third-Party AI Agent:</strong> An AI agent whose client runtime is a product
 provided by a third party (e.g., Claude, GitHub Copilot). The implementer
 cannot modify client elicitation handling.<a href="#section-2.1-2.5.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.1-2.6">
-            <p id="section-2.1-2.6.1"><strong>Authorization Challenge Response:</strong> An HTTP 400 response from the
-authorization server carrying <code>"error": "insufficient_authorization"</code>
-and an <code>auth_session</code> binding token, as defined in <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>.<a href="#section-2.1-2.6.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-2.1-2.7">
-            <p id="section-2.1-2.7.1"><strong>Authorization Challenge Request:</strong> An HTTP POST from the agent runtime
-to the authorization server carrying an <code>auth_session</code> and credential
-response, as defined in <span>[<a href="#FiPA" class="cite xref">FiPA</a>]</span>.<a href="#section-2.1-2.7.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1876,141 +1836,60 @@ authenticated ACR value, per <span>[<a href="#FiPA" class="cite xref">FiPA</a>]<
 </div>
 </section>
 </div>
-<div id="passkey-challenge-third-party-ai-agent">
+<div id="passkey-challenge">
 <section id="section-7">
-      <h2 id="name-7-passkey-challenge-third-p">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-7-passkey-challenge-third-p" class="section-name selfRef">7. Passkey Challenge — Third-Party AI Agent</a>
+      <h2 id="name-7-passkey-challenge">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-7-passkey-challenge" class="section-name selfRef">7. Passkey Challenge</a>
       </h2>
 <p id="section-7-1">In a Third-Party AI Agent deployment, the client runtime is a product the
 implementer does not control. It supports standard Structured Elicitation form
 mode and URL mode but cannot be extended with custom format handling or WebAuthn
-API invocation.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">WebAuthn requires a cryptographic ceremony: the authorization server generates
-a <code>challenge</code> nonce and <code>PublicKeyCredentialRequestOptions</code>; the client invokes
-the platform WebAuthn API; the platform authenticator returns a
-<code>PublicKeyCredential</code> assertion. Structured Elicitation form mode cannot
-express this ceremony within its supported <code>requestedSchema</code> primitive types.
-For Third-Party AI Agents, only URL mode is available for Passkeys.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<div id="authorization-challenge-response-2">
-<section id="section-7.1">
-        <h3 id="name-71-authorization-challenge-">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-71-authorization-challenge-" class="section-name selfRef">7.1 Authorization Challenge Response</a>
-        </h3>
-<p id="section-7.1-1">The authorization server includes a URL mode elicitation entry for the Passkey
-step. The <code>url</code> points to an HTTPS endpoint that drives the full WebAuthn
-ceremony in a browser or webview. The WebAuthn assertion is submitted directly
-from the browser to the authorization server — it does not transit the agent
-channel.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
-<div class="lang-http sourcecode" id="section-7.1-2">
-<pre>
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "insufficient_authorization",
-  "auth_session": "sess_abc123",
-  "elicitations": [
-    {
-      "mode": "url",
-      "message": "Complete Passkey authentication in the browser window.",
-      "url": "https://auth.example.com/webauthn/begin?auth_session=sess_abc123",
-      "elicitationId": "el-passkey-ent-001"
-    }
-  ]
-}
-</pre><a href="#section-7.1-2" class="pilcrow">¶</a>
-</div>
-</section>
-</div>
-<div id="out-of-band-completion">
-<section id="section-7.2">
-        <h3 id="name-72-out-of-band-completion">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-72-out-of-band-completion" class="section-name selfRef">7.2 Out-of-Band Completion</a>
-        </h3>
-<p id="section-7.2-1">Once the browser opens the URL, the WebAuthn ceremony is handled entirely
-between the browser and the authorization server per <span>[<a href="#WebAuthn" class="cite xref">WebAuthn</a>]</span>. This is out
-of scope for this draft — the agent runtime and this extension play no role
-in it.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="limitations-1">
-<section id="section-7.3">
-        <h3 id="name-73-limitations">
-<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-73-limitations" class="section-name selfRef">7.3 Limitations</a>
-        </h3>
-<table class="center" id="table-2">
-          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
-<thead>
-            <tr>
-              <th class="text-left" rowspan="1" colspan="1">Limitation</th>
-              <th class="text-left" rowspan="1" colspan="1">Impact</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">Requires user browser access</td>
-              <td class="text-left" rowspan="1" colspan="1">The user MUST be able to open the URL in a browser. CLI clients can present the URL for manual opening, following the device flow pattern per <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span>.</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">Context switch</td>
-              <td class="text-left" rowspan="1" colspan="1">User leaves the AI Agent interface to complete the ceremony.</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">Out-of-band result</td>
-              <td class="text-left" rowspan="1" colspan="1">The WebAuthn assertion does not transit the agent channel. The agent runtime MUST poll the authorization server (per <span>[<a href="#RFC8628" class="cite xref">RFC8628</a>]</span> or <span>[<a href="#CIBA" class="cite xref">CIBA</a>]</span>) until the ceremony completes and a token is issued.</td>
-            </tr>
-          </tbody>
-        </table>
-</section>
-</div>
-</section>
-</div>
-<div id="passkey-challenge-first-party-ai-agent">
-<section id="section-8">
-      <h2 id="name-8-passkey-challenge-first-p">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-8-passkey-challenge-first-p" class="section-name selfRef">8. Passkey Challenge — First-Party AI Agent</a>
-      </h2>
-<p id="section-8-1">In a First-Party AI Agent deployment, the implementer controls the agent code.
-The agent MAY implement custom elicitation handling, including native WebAuthn
-API invocation using the OS or platform FIDO2 APIs (<span>[<a href="#FIDO-CTAP" class="cite xref">FIDO-CTAP</a>]</span>). The WebAuthn
-ceremony is performed in-band: no browser, no redirect.<a href="#section-8-1" class="pilcrow">¶</a></p>
+API invocation.
+For Third-Party AI Agents, URL mode SHOULD be used to redirect the user to a
+browser-based WebAuthn flow. The out-of-band WebAuthn ceremony is outside the
+scope of this specification.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">For in-band Passkey support, a First-Party AI Agent deployment is required.
+The implementer controls the agent code and MAY implement custom elicitation
+handling, including native WebAuthn API invocation using the OS or platform
+FIDO2 APIs (<span>[<a href="#FIDO-CTAP" class="cite xref">FIDO-CTAP</a>]</span>). The WebAuthn ceremony is performed in-band: no
+browser, no redirect.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <div id="webauthn-challenge-delivery">
-<section id="section-8.1">
-        <h3 id="name-81-webauthn-challenge-deliv">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-81-webauthn-challenge-deliv" class="section-name selfRef">8.1 WebAuthn Challenge Delivery</a>
+<section id="section-7.1">
+        <h3 id="name-71-webauthn-challenge-deliv">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-71-webauthn-challenge-deliv" class="section-name selfRef">7.1 WebAuthn Challenge Delivery</a>
         </h3>
-<p id="section-8.1-1">This section defines how the authorization server delivers WebAuthn challenge
-parameters to the agent through Structured Elicitation form mode.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.1-2">TODO<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-1">This section defines how the authorization server delivers WebAuthn challenge
+parameters to the agent through Structured Elicitation form mode.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">TODO<a href="#section-7.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="authorization-challenge-response-3">
-<section id="section-8.2">
-        <h3 id="name-82-authorization-challenge-">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-82-authorization-challenge-" class="section-name selfRef">8.2 Authorization Challenge Response</a>
+<div id="authorization-challenge-response-2">
+<section id="section-7.2">
+        <h3 id="name-72-authorization-challenge-">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-72-authorization-challenge-" class="section-name selfRef">7.2 Authorization Challenge Response</a>
         </h3>
-<p id="section-8.2-1">TODO<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-1">TODO<a href="#section-7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="security-considerations">
-<section id="section-9">
-      <h2 id="name-10-security-considerations">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-10-security-considerations" class="section-name selfRef">10. Security Considerations</a>
+<section id="section-8">
+      <h2 id="name-8-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-8-security-considerations" class="section-name selfRef">8. Security Considerations</a>
       </h2>
-<p id="section-9-1">TODO Security<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-8-1">TODO Security<a href="#section-8-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-10">
+<section id="section-9">
       <h2 id="name-references">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-10.1">
+<section id="section-9.1">
         <h3 id="name-normative-references">
-<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="CIBA">[CIBA]</dt>
@@ -2053,9 +1932,9 @@ parameters to the agent through Structured Elicitation form mode.<a href="#secti
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-10.2">
+<section id="section-9.2">
         <h3 id="name-informative-references">
-<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="CAAM">[CAAM]</dt>
