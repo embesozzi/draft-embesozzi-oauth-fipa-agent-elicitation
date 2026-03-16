@@ -1,33 +1,47 @@
-# OAuth 2.0 Native Authorization via MCP Elicitation
+# OAuth 2.0 First-Party Native Authorization for AI Agents via Structured Elicitation
 
-**Document:** `draft-embesozzi-oauth-fipa-mcp-elicitation`  
-**Status:** Individual Submission — Informational  
-**Author:** Martin Besozzi (TwoGenIdentity)  
-**Date:** 2026-03-09  
+**Document:** `draft-embesozzi-oauth-fipa-agent-elicitation`
+**Status:** Individual Submission — Informational
+**Author:** Martin Besozzi (TwoGenIdentity)
+**Date:** 2026-03-09
 
 ## Abstract
 
-The OAuth 2.0 First-Party Applications (FiPA) specification defines a
-challenge/response protocol enabling API-native authentication without
-browser redirects. FiPA intentionally leaves authenticator metadata out
-of scope. This gap prevents interoperable implementation by AI Agents.
+This document defines a Structured Elicitation extension to the OAuth 2.0
+First-Party Applications (FiPA) specification, establishing a standard
+metadata format for FiPA authorization challenge responses. FiPA intentionally
+leaves authenticator metadata out of scope: the format in which the
+authorization server describes available authenticators and the inputs they
+require is undefined. This gap prevents interoperable implementation by AI
+Agents, CLI tools, and other non-browser clients.
 
-This document proposes an extension that adopts MCP Elicitation as the
-standard metadata language for FiPA authenticator challenges, covering
-TOTP, Passkey (WebAuthn) and extended to other authenticator types across Third-Party and
-First-Party AI Agent deployments.
+Model Context Protocol (MCP) Elicitation serves as the normative reference
+implementation of the Structured Elicitation mechanism. The extension
+addresses Human-to-Agent (H2A) communication patterns in which a human user
+interacts with an AI Agent acting as the FiPA client on their behalf. The
+scope covers two strong authenticator types: Authenticator Apps (TOTP) and
+Passkeys (WebAuthn). Password authentication is explicitly out of scope. The
+same pattern is extensible to other authenticator types by defining additional
+`requestedSchema` structures.
+
+The extension is specified across two deployment types: Third-Party AI Agents
+(e.g., Claude, GitHub Copilot), where the client runtime is provided by a
+third party and cannot be modified; and First-Party AI Agents, where the
+implementer controls the agent code. Both deployment types share the same
+FiPA challenge/response wire format and Structured Elicitation protocol,
+differing only in Passkey handling.
 
 ## Documents
 
 | Document | Link |
 |----------|------|
-| **Draft** | [draft-oauth-fipa-mcp-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-mcp-elicitation/draft-oauth-fipa-mcp-elicitation.html) |
+| **Draft** | [draft-oauth-fipa-agent-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-mcp-elicitation/draft-oauth-fipa-agent-elicitation.html) |
 
 ## Versions
 
 | Date | Link |
 |------|------|
-| **Latest** | [Editor's Copy](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-mcp-elicitation/draft-oauth-fipa-mcp-elicitation.html) |
+| **Latest** | [Editor's Copy](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-mcp-elicitation/draft-oauth-fipa-agent-elicitation.html) |
 
 ## Contributing
 
