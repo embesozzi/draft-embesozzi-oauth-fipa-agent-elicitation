@@ -21,13 +21,7 @@ normative:
   RFC2119:
   RFC6749:
   RFC8174:
-  RFC8628:
   RFC9700:
-  CIBA:
-    target: https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html
-    title: "OpenID Connect Client-Initiated Backchannel Authentication Flow — Core 1.0"
-    author:
-      org: OpenID Foundation
   FiPA:
     target: https://datatracker.ietf.org/doc/draft-ietf-oauth-first-party-apps/
     title: "OAuth 2.0 First-Party Applications"
@@ -45,6 +39,12 @@ normative:
       org: W3C
 
 informative:
+  RFC8628:
+  CIBA:
+    target: https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html
+    title: "OpenID Connect Client-Initiated Backchannel Authentication Flow — Core 1.0"
+    author:
+      org: OpenID Foundation
   FIDO-CTAP:
     target: https://fidoalliance.org/specs/fido-v2.2-rd-20230321/fido-client-to-authenticator-protocol-v2.2-rd-20230321.html
     title: "Client to Authenticator Protocol (CTAP) 2.2"
@@ -73,17 +73,15 @@ authorization server describes available authenticators and the inputs they
 require is undefined.  This gap prevents interoperable implementation by AI
 Agents and other non-browser clients.
 
-The extension defines a transport-agnostic Structured Elicitation mechanism.
 Model Context Protocol (MCP) Elicitation [MCP-Elicitation] serves as the
-normative runtime binding; a non-normative binding for HTTP-based AI Agent
-APIs is also provided.  The scope covers two authenticator types: Authenticator
-Apps (TOTP) and Passkeys (WebAuthn).
+reference runtime binding and is the only binding normatively defined in
+this specification.
 
 --- middle
 
-# 1. Introduction
+# Introduction
 
-## 1.1 Applicability
+## Applicability
 
 The FiPA specification ([FiPA]) enables first-party clients to authenticate
 users API-natively. The client submits credentials directly to the
@@ -113,7 +111,7 @@ Third-Party agents (e.g., Claude, GitHub Copilot) use URL mode for an
 out-of-band browser ceremony; First-Party agents that control their runtime
 MAY perform the WebAuthn ceremony in-band via form mode.
 
-## 1.2 Human-to-Agent (H2A) Communication Model
+## Human-to-Agent (H2A) Communication Model
 
 This extension addresses the Human-to-Agent (H2A) communication pattern.
 In this pattern, a human user interacts with an AI Agent
@@ -133,7 +131,7 @@ agent satisfies authorization challenges without human involvement.  The
 present document is scoped to H2A interactions; A2A authorization is outside
 the scope of this specification.
 
-## 1.3 Limitations
+## Limitations
 
 This document does not define:
 
@@ -142,7 +140,7 @@ This document does not define:
   defines a negotiation mechanism.
 - Changes to the FiPA wire format beyond the `elicitations` array extension.
 
-# 2. Conventions and Definitions
+# Conventions and Definitions
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -150,7 +148,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
 capitals, as shown here.
 
-## 2.1 Terminology
+## Terminology
 
 This document uses terminology defined in [RFC6749], [FiPA], and
 [MCP-Elicitation]. The following terms are used as defined:
@@ -172,7 +170,7 @@ This document uses terminology defined in [RFC6749], [FiPA], and
   provided by a third party (e.g., Claude, GitHub Copilot). The implementer
   cannot modify client elicitation handling.
 
-# 3. Protocol Overview
+# Protocol Overview
 
 This extension operates within the FiPA challenge/response cycle defined in
 [FiPA]. A FiPA authorization request that requires additional authentication
@@ -215,9 +213,9 @@ For URL mode, `mode` and `elicitationId` are REQUIRED in the elicitation
 params. URL mode responses carry no `content` — the interaction result is
 submitted directly from the browser context to the authorization server.
 
-# 4. Elicitation Extension
+# Elicitation Extension
 
-## 4.1 The `elicitations` Array
+## The `elicitations` Array
 
 This extension adds an `elicitations` array to the FiPA
 `insufficient_authorization` error response. Each entry carries a Structured
@@ -235,7 +233,35 @@ Fields per entry:
 | `url` | URL mode only | Endpoint URL. Maps to Structured Elicitation `url`. |
 | `elicitationId` | URL mode only | Unique ID for out-of-band completion tracking. Maps to Structured Elicitation `elicitationId`. |
 
-## 4.2 Elicitation Sequencing
+### The `response` Parameter
+
+When the client submits an Authorization Challenge Request in response to an
+`elicitations` entry, the collected credential fields are carried in a `response`
+parameter in the request body. The `response` parameter is a JSON object whose
+properties correspond to the field names defined in the `requestedSchema` of the
+elicitation entry that prompted the request.
+
+For example, if the `requestedSchema` defines a field named `otp`, the
+corresponding Authorization Challenge Request carries:
+
+~~~ json
+{ "response": { "otp": "847291" } }
+~~~
+
+The `response` parameter is a new parameter introduced by this extension and
+MUST be included in all intermediate Authorization Challenge Requests that
+carry elicitation content.
+
+### Request Content Type for Intermediate Requests
+
+The initial Authorization Challenge Request MUST use
+`application/x-www-form-urlencoded` as required by [FiPA]. Intermediate
+requests — those that carry an `auth_session` obtained from a prior challenge
+response — MAY use `application/json` as the content type.  This is consistent
+with [FiPA], which explicitly permits intermediate requests to use a different
+format than the initial request.
+
+## Elicitation Sequencing
 
 The `elicitations` array typically contains one entry at a time. Because
 subsequent steps depend on prior user selections (e.g., choosing TOTP versus
@@ -243,13 +269,13 @@ Passkey changes the next challenge), the authorization server issues each
 step's elicitation in a new Authorization Challenge Response after the
 preceding credential is submitted.
 
-## 4.3 Runtime Bindings
+## Runtime Bindings
 
 The `elicitations` array is a transport-agnostic FiPA extension. The agent
 runtime is responsible for translating each entry into its native interaction
 mechanism. This section defines bindings for known runtimes.
 
-### 4.3.1 MCP Elicitation Binding
+### MCP Elicitation Binding
 
 When the agent runtime is MCP-based, the runtime (acting as the FiPA client)
 maps each `elicitations` entry directly to an `elicitation/create` params
@@ -325,11 +351,64 @@ MCP client response:
 }
 ~~~
 
-### 4.3.2 HTTP API Binding
+#### MCP Elicitation Flow Example
+
+~~~
+   Human        AI Agent        MCP Server        Authorization Server
+     |               |               |                      |
+     |  Prompt       |               |                      |
+     |-------------->|               |                      |
+     |               |  execute      |                      |
+     |               |  MCP tool     |                      |
+     |               |-------------->|                      |
+     |               |               |  Authorization       |
+     |               |               |  Request             |
+     |               |               |--------------------->|
+     |               |               |                      |
+     |               |               |  Authorization       |
+     |               |               |  Challenge Error     |
+     |               |               |  + Elicitations      |
+     |               |               |<---------------------|
+     |               |               |                      |
+     |               |               |  MCP Elicitation     |
+     |               |<--------------|                      |
+     |               |               |                      |
+     |  Input        |               |                      |
+     |-------------->|               |                      |
+     |               |  Elicitation  |                      |
+     |               |  Response     |                      |
+     |               |-------------->|                      |
+     |               |               |  Authorization       |
+     |               |               |  Challenge Request   |
+     |               |               |--------------------->|
+     |               |               |                      |
+     |               |               |  Authorization       |
+     |               |               |  Challenge Error     |
+     |               |               |  + Elicitations      |
+     |               |               |<---------------------|
+     |               |               |                      |
+     |               |               |  ... (repeat as      |
+     |               |               |  needed)             |
+     |               |               |                      |
+     |               |               |  Authorization       |
+     |               |               |  Code Response       |
+     |               |               |<---------------------|
+     |               |               |                      |
+     |               |               |  Token Request       |
+     |               |               |--------------------->|
+     |               |               |                      |
+     |               |               |  Token Response      |
+     |               |               |<---------------------|
+     |               |               |                      |
+~~~
+
+
+
+### HTTP API Binding
 
 TODO: future section
 
-## 4.4 Clients Without Structured Elicitation Support
+## Clients Without Structured Elicitation Support
 
 For clients that do not support Structured Elicitation, the authorization
 server returns a standard OAuth error response per [RFC6749] §5.2. The
@@ -342,7 +421,7 @@ WWW-Authenticate: Bearer realm="authorization-server",
                   auth_session="sess_abc123"
 ~~~
 
-# 5. Authenticator Selection
+# Authenticator Selection
 
 The following sections define the FiPA wire format for each authenticator type.
 Runtime-specific translation (e.g., MCP Elicitation) is defined in Section 4.3.
@@ -352,7 +431,7 @@ available authenticators. This specification defines elicitation schemas for
 two authenticator types: Passkey (WebAuthn) and Authenticator App (TOTP).
 Password authentication is outside the scope of this document.
 
-## 5.1 Authorization Challenge Response
+## Authorization Challenge Response
 
 When multiple authenticators are supported, the authorization server returns a
 selection prompt:
@@ -417,7 +496,7 @@ Content-Type: application/json
 }
 ~~~
 
-## 5.2 Authorization Challenge Request
+## Authorization Challenge Request
 
 ~~~ http
 POST /as/authorization.oauth2
@@ -429,12 +508,12 @@ Content-Type: application/json
 }
 ~~~
 
-# 6. TOTP Challenge
+# TOTP Challenge
 
 TOTP uses form mode: the challenge is a 6-digit numeric code, expressible as a
 plain string with `pattern` and length constraints.
 
-## 6.1 Authorization Challenge Response
+## Authorization Challenge Response
 
 ~~~ http
 HTTP/1.1 400 Bad Request
@@ -465,7 +544,7 @@ Content-Type: application/json
 }
 ~~~
 
-## 6.2 Authorization Challenge Request
+## Authorization Challenge Request
 
 ~~~ http
 POST /as/authorization.oauth2
@@ -480,7 +559,7 @@ Content-Type: application/json
 On success, the authorization server issues an OAuth token with the
 authenticated ACR value, per [FiPA].
 
-# 7. Passkey Challenge
+# Passkey Challenge
 
 In a Third-Party AI Agent deployment, the client runtime is a product the
 implementer does not control. It supports standard Structured Elicitation form
@@ -496,19 +575,22 @@ handling, including native WebAuthn API invocation using the OS or platform
 FIDO2 APIs ([FIDO-CTAP]). The WebAuthn ceremony is performed in-band: no
 browser, no redirect.
 
-## 7.1 WebAuthn Challenge Delivery
+## WebAuthn Challenge Delivery
 
 This section defines how the authorization server delivers WebAuthn challenge
 parameters to the agent through Structured Elicitation form mode.
 
 TODO
 
-## 7.2 Authorization Challenge Response
+## Authorization Challenge Response
 
 TODO
 
-# 8. Security Considerations
+# Security Considerations
 
 TODO Security
+
+# IANA Considerations
+This document has no IANA actions.
 
 --- back
