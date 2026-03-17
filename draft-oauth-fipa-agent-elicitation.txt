@@ -14,6 +14,13 @@ OAuth 2.0 First-Party Native Authorization for AI Agents via Structured
 
 Abstract
 
+   AI Agents executing on behalf of users may encounter operations that
+   require step-up authentication or explicit user approval — a just-in-
+   time (JIT) authorization gate.  Upon successful completion of the
+   FiPA challenge/response cycle, the authorization server issues a
+   token that serves as cryptographic proof of the user's consent, bound
+   to the specific auth session.
+
    This document defines a Structured Elicitation extension to the OAuth
    2.0 First-Party Applications (FiPA) specification [FiPA],
    establishing a standard metadata format for FiPA authorization
@@ -93,42 +100,22 @@ Table of Contents
 
 1.1.  Applicability
 
-   The FiPA specification ([FiPA]) enables first-party clients to
-   authenticate users API-natively.  The client submits credentials
-   directly to the authorization server and receives structured
-   challenge responses rather than redirect URLs.
+   AI Agents operate autonomously and do not inherently distinguish
+   routine operations from sensitive ones.  When an agent encounters an
+   operation requiring step-up authentication or explicit user approval,
+   a just-in-time (JIT) authorization gate is needed: the agent must
+   pause, surface a structured challenge to the human user, and obtain a
+   cryptographic proof — an OAuth token — before proceeding.  The FiPA
+   specification ([FiPA]) provides the challenge/response wire protocol
+   for this gate.  This extension defines the metadata format that makes
+   FiPA challenges machine-readable for agent runtimes.
 
-   FiPA does not define:
-
-   *  The format for advertising which authenticators are available
-
-   *  The input schema each authenticator challenge requires
-
-   *  How multi-step flows (authenticator selection → credential entry)
-      are sequenced
-
-   Without a standard for this metadata, every authorization server
-   invents its own format.  AI Agents and agent runtimes cannot
-   generically handle FiPA challenges without server-specific
-   integration.
-
-   This extension applies to deployments where:
-
-   *  The client is an AI Agent acting on behalf of a human user (see
-      Section 1.2).
-
-   *  The authorization server supports the FiPA challenge/response
-      protocol.
-
-   *  The agent runtime supports a Structured Elicitation mechanism
-      (Section 4), with MCP Elicitation [MCP-Elicitation] as the
-      normative reference implementation.
-
-   The Passkey challenge flow (Section 7) differs based on runtime
-   capability: Third-Party agents (e.g., Claude, GitHub Copilot) use URL
-   mode for an out-of-band browser ceremony; First-Party agents that
-   control their runtime MAY perform the WebAuthn ceremony in-band via
-   form mode.
+   This extension applies when the client is an AI Agent acting on
+   behalf of a human user (see Section 1.2), the authorization server
+   supports the FiPA challenge/response protocol, and the agent runtime
+   supports a Structured Elicitation mechanism (Section 4), with MCP
+   Elicitation [MCP-Elicitation] as the normative reference
+   implementation.
 
 1.2.  Human-to-Agent (H2A) Communication Model
 
@@ -242,6 +229,13 @@ Table of Contents
    params.  URL mode responses carry no content — the interaction result
    is submitted directly from the browser context to the authorization
    server.
+
+   Upon completion of the challenge/response cycle, the authorization
+   server issues an authorization code or token bound to the
+   auth_session.  This token serves as cryptographic proof that a human
+   user satisfied the required authentication challenge at a specific
+   point in time, enabling the MCP server to enforce JIT authorization
+   before executing sensitive operations.
 
 4.  Elicitation Extension
 
@@ -660,10 +654,6 @@ Table of Contents
               <https://www.w3.org/TR/webauthn/>.
 
 10.2.  Informative References
-
-   [CAAM]     IETF, "Contextual Agent Authorization Mesh", n.d.,
-              <https://datatracker.ietf.org/doc/html/draft-barney-caam-
-              00>.
 
    [CIBA]     OpenID Foundation, "OpenID Connect Client-Initiated
               Backchannel Authentication Flow — Core 1.0", n.d.,
