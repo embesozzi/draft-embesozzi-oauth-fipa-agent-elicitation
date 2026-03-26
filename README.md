@@ -1,4 +1,4 @@
-# OAuth 2.0 First-Party Native Authorization for AI Agents via Structured Elicitation
+# OAuth 2.0 Agents Native Authorization via Structured Elicitation
 
 **Document:** `draft-embesozzi-oauth-fipa-agent-elicitation`  
 **Status:** Individual Submission — Informational  
@@ -15,14 +15,16 @@ proof of the user's consent, bound to the specific auth session.
 
 This document defines a Structured Elicitation extension to the OAuth 2.0
 First-Party Applications (FiPA) specification, establishing a standard
-metadata format for FiPA authorization challenge responses. FiPA intentionally
-leaves authenticator metadata out of scope: the format in which the
-authorization server describes available authenticators and the inputs they
-require is undefined. This gap prevents interoperable implementation by AI
-Agents and other non-browser clients.
+metadata format for FiPA authorization challenge responses. FiPA leaves the
+format for advertising available authenticators and their required inputs
+undefined, preventing interoperable implementation by AI Agents and other
+non-browser clients. This extension adds an `elicitations` array to the FiPA
+Authorization Challenge Response, providing a standard metadata format for
+authenticator challenges. Model Context Protocol (MCP) Elicitation is the
+normative reference binding.
 
-Model Context Protocol (MCP) Elicitation serves as the reference runtime
-binding and is the only binding normatively defined in this specification.
+This specification covers the just-in-time (JIT) authorization for AI Agents
+executing on behalf of users in Human-to-Agent (H2A) flows.
 
 ## Documents
 

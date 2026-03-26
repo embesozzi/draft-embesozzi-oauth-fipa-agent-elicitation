@@ -1,6 +1,6 @@
 ---
-title: "OAuth 2.0 First-Party Native Authorization for AI Agents via Structured Elicitation"
-abbrev: "OAuth 2.0 FiPA Agent Elicitation"
+title: "OAuth 2.0 Agents Native Authorization via Structured Elicitation"
+abbrev: "Agent Native Authorization"
 docname: draft-embesozzi-oauth-fipa-agent-elicitation
 date: 2026-03-09
 category: info
@@ -39,17 +39,6 @@ normative:
       org: W3C
 
 informative:
-  RFC8628:
-  CIBA:
-    target: https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html
-    title: "OpenID Connect Client-Initiated Backchannel Authentication Flow — Core 1.0"
-    author:
-      org: OpenID Foundation
-  FIDO-CTAP:
-    target: https://fidoalliance.org/specs/fido-v2.2-rd-20230321/fido-client-to-authenticator-protocol-v2.2-rd-20230321.html
-    title: "Client to Authenticator Protocol (CTAP) 2.2"
-    author:
-      org: FIDO Alliance
   EAP-ACR:
     target: https://openid.net/specs/openid-connect-eap-acr-values-1_0.html
     title: "OpenID Connect Extended Authentication Profile (EAP) ACR Values 1.0"
@@ -60,23 +49,17 @@ informative:
 
 --- abstract
 
-AI Agents executing on behalf of users may encounter operations that require
-step-up authentication or explicit user approval — a just-in-time (JIT)
-authorization gate.  Upon successful completion of the FiPA challenge/response
-cycle, the authorization server issues a token that serves as cryptographic
-proof of the user's consent, bound to the specific auth session.
-
 This document defines a Structured Elicitation extension to the OAuth 2.0
 First-Party Applications (FiPA) specification [FiPA], establishing a standard
-metadata format for FiPA authorization challenge responses.  FiPA intentionally
-leaves authenticator metadata out of scope: the format in which the
-authorization server describes available authenticators and the inputs they
-require is undefined.  This gap prevents interoperable implementation by AI
-Agents and other non-browser clients.
+metadata format for FiPA authorization challenge responses.  FiPA leaves the format
+for advertising available authenticators and their required inputs undefined,
+preventing interoperable implementation by AI Agents and other non-browser
+clients. This extension adds an `elicitations` array to the FiPA Authorization
+Challenge Response, providing a standard metadata format for authenticator
+challenges. Model Context Protocol (MCP) Elicitation [MCP-Elicitation] is the
+normative reference binding.
 
-Model Context Protocol (MCP) Elicitation [MCP-Elicitation] serves as the
-reference runtime binding and is the only binding normatively defined in
-this specification.
+This specification covers the just-in-time (JIT) authorization for AI Agents executing on behalf of users in Human-to-Agent (H2A) flows.
 
 --- middle
 
@@ -89,7 +72,7 @@ operations from sensitive ones.  When an agent encounters an operation
 requiring step-up authentication or explicit user approval, a just-in-time
 (JIT) authorization gate is needed: the agent must pause, surface a structured
 challenge to the human user, and obtain a cryptographic proof — an OAuth token
-— before proceeding.  The FiPA specification ([FiPA]) provides the
+— before proceeding.  The FiPA specification [FiPA] provides the
 challenge/response wire protocol for this gate.  This extension defines the
 metadata format that makes FiPA challenges machine-readable for agent runtimes.
 
@@ -119,15 +102,6 @@ agent satisfies authorization challenges without human involvement.  The
 present document is scoped to H2A interactions; A2A authorization is outside
 the scope of this specification.
 
-## Limitations
-
-This document does not define:
-
-- Capability negotiation between the agent runtime and the authorization
-  server. Implementations MUST use application-specific mechanisms until FiPA
-  defines a negotiation mechanism.
-- Changes to the FiPA wire format beyond the `elicitations` array extension.
-
 # Conventions and Definitions
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -141,7 +115,16 @@ capitals, as shown here.
 This document uses terminology defined in [RFC6749], [FiPA], and
 [MCP-Elicitation]. The following terms are used as defined:
 
+
 - **Authorization Server (AS):** As defined in [RFC6749].
+
+- **Just-In-Time (JIT) Authorization:** An authorization pattern in which a
+  fresh credential challenge is issued at the moment a sensitive action is
+  attempted, rather than relying solely on the trust established at initial
+  authentication. This extension enables JIT Authorization by providing the
+  structured metadata needed for agent runtimes to surface mid-flow challenges
+  to the human user.
+
 - **Structured Elicitation:** The abstract mechanism by which an agent runtime
   requests structured user input mid-flow and returns a structured response.
   MCP Elicitation [MCP-Elicitation] is a conformant implementation of this
@@ -155,7 +138,7 @@ This document uses terminology defined in [RFC6749], [FiPA], and
   authorization server. The agent MAY implement FiPA-specific elicitation
   extensions.
 - **Third-Party AI Agent:** An AI agent whose client runtime is a product
-  provided by a third party (e.g., Claude, GitHub Copilot). The implementer
+  provided by a third party. The implementer
   cannot modify client elicitation handling.
 
 # Protocol Overview
@@ -178,28 +161,12 @@ The `auth_session` binds all subsequent requests to this authentication
 context. FiPA supports multi-step flows via continued challenge/response cycles
 on the same `auth_session`.
 
+
 This extension adds an `elicitations` array to the Authorization Challenge
-Response (Section 4). Each entry in `elicitations` carries a Structured
-Elicitation descriptor. When the agent runtime supports MCP Elicitation
-[MCP-Elicitation], each entry maps directly to a pending `elicitation/create`
-call. The agent runtime acting as the FiPA client translates each entry into a
-Structured Elicitation request directed at the human user.
-
-Structured Elicitation defines two modes used by this extension:
-
-- **Form mode** — in-band structured data collection. The server provides a
-  `requestedSchema` (a restricted JSON Schema subset); the runtime renders a
-  native form and returns structured content. Supported `requestedSchema` types
-  are: `string` (with `title`, `description`, `minLength`, `maxLength`,
-  `pattern`, `format`, `default`, `enum`, `oneOf`), `number`/`integer`,
-  `boolean`, and flat arrays with `enum`/`anyOf`.
-- **URL mode** — out-of-band interaction. The server provides a URL the
-  runtime opens in a browser or webview. The result is submitted externally;
-  the response carries only an `action`.
-
-For URL mode, `mode` and `elicitationId` are REQUIRED in the elicitation
-params. URL mode responses carry no `content` — the interaction result is
-submitted directly from the browser context to the authorization server.
+Response. Each entry in the array describes one authenticator challenge the
+human user must complete. The agent runtime translates each entry into a
+Structured Elicitation request directed at the human user, collects the
+response, and submits it in the next Authorization Challenge Request.
 
 Upon completion of the challenge/response cycle, the authorization server
 issues an authorization code or token bound to the `auth_session`.  This token
@@ -209,42 +176,25 @@ to enforce JIT authorization before executing sensitive operations.
 
 # Elicitation Extension
 
-## The `elicitations` Array
+## Response Format
 
-This extension adds an `elicitations` array to the FiPA
-`insufficient_authorization` error response. Each entry carries a Structured
-Elicitation descriptor. When the agent runtime supports MCP Elicitation
-[MCP-Elicitation], each entry maps directly to a pending `elicitation/create`
-call.
+The `elicitations` array is added to the FiPA `insufficient_authorization`
+error response body. Each entry carries the parameters needed for the agent
+runtime to present a structured challenge to the human user.
 
 Fields per entry:
 
 | Field | Required | Description |
 |---|---|---|
-| `mode` | Yes | `"form"` or `"url"`. Maps to Structured Elicitation `mode`. |
-| `message` | Yes | Human-readable prompt. Maps to Structured Elicitation `message`. |
-| `requestedSchema` | Form mode only | JSON Schema for the form. Maps 1:1 to Structured Elicitation `requestedSchema`. |
-| `url` | URL mode only | Endpoint URL. Maps to Structured Elicitation `url`. |
-| `elicitationId` | URL mode only | Unique ID for out-of-band completion tracking. Maps to Structured Elicitation `elicitationId`. |
+| `mode` | REQUIRED | Interaction mode. `"form"` for in-band structured data collection using a JSON Schema. |
+| `message` | REQUIRED | Human-readable prompt displayed to the user by the agent runtime. |
+| `requestedSchema` | Form mode only | A restricted JSON Schema object describing the fields the user must fill in. Maps 1:1 to the Structured Elicitation `requestedSchema`. |
 
-### The `response` Parameter
+Note: A `"url"` mode (out-of-band browser interaction) is defined in
+[MCP-Elicitation] and may be used in future revisions of this specification
+for authenticator types that require a browser ceremony (e.g., Passkeys in
+runtimes that cannot invoke the WebAuthn API natively).
 
-When the client submits an Authorization Challenge Request in response to an
-`elicitations` entry, the collected credential fields are carried in a `response`
-parameter in the request body. The `response` parameter is a JSON object whose
-properties correspond to the field names defined in the `requestedSchema` of the
-elicitation entry that prompted the request.
-
-For example, if the `requestedSchema` defines a field named `otp`, the
-corresponding Authorization Challenge Request carries:
-
-~~~ json
-{ "response": { "otp": "847291" } }
-~~~
-
-The `response` parameter is a new parameter introduced by this extension and
-MUST be included in all intermediate Authorization Challenge Requests that
-carry elicitation content.
 
 ### Request Content Type for Intermediate Requests
 
@@ -255,13 +205,26 @@ response — MAY use `application/json` as the content type.  This is consistent
 with [FiPA], which explicitly permits intermediate requests to use a different
 format than the initial request.
 
-## Elicitation Sequencing
+### Elicitation Sequencing
 
 The `elicitations` array typically contains one entry at a time. Because
 subsequent steps depend on prior user selections (e.g., choosing TOTP versus
 Passkey changes the next challenge), the authorization server issues each
 step's elicitation in a new Authorization Challenge Response after the
 preceding credential is submitted.
+
+### Clients Without Structured Elicitation Support
+
+For clients that do not support Structured Elicitation, the authorization
+server returns a standard OAuth error response per [RFC6749] §5.2. The
+`WWW-Authenticate` response header per [RFC6749] §5.2 is one example of how
+the error is surfaced at the HTTP level:
+
+~~~ http
+WWW-Authenticate: Bearer realm="authorization-server",
+                  error="insufficient_scope",
+                  auth_session="sess_abc123"
+~~~
 
 ## Runtime Bindings
 
@@ -402,30 +365,86 @@ MCP client response:
 
 TODO: future section
 
-## Clients Without Structured Elicitation Support
-
-For clients that do not support Structured Elicitation, the authorization
-server returns a standard OAuth error response per [RFC6749] §5.2. The
-`WWW-Authenticate` response header per [RFC6749] §5.2 is one example of how
-the error is surfaced at the HTTP level:
-
-~~~ http
-WWW-Authenticate: Bearer realm="authorization-server",
-                  error="insufficient_scope",
-                  auth_session="sess_abc123"
-~~~
-
-# Authenticator Selection
-
-The following sections define the FiPA wire format for each authenticator type.
-Runtime-specific translation (e.g., MCP Elicitation) is defined in Section 4.3.
-
-When additional authentication is required, the first elicitation presents the
-available authenticators. This specification defines elicitation schemas for
-two authenticator types: Passkey (WebAuthn) and Authenticator App (TOTP).
-Password authentication is outside the scope of this document.
+# Authorization Challenge Protocol
 
 ## Authorization Challenge Response
+
+When the authorization server requires additional authentication, it returns an
+`insufficient_authorization` error response containing an `elicitations` array.
+Each entry in `elicitations` describes one structured challenge the agent runtime
+MUST present to the human user.
+
+The response includes the following parameters:
+
+| Parameter | Required | Description |
+|---|---|---|
+| `error` | REQUIRED | MUST be `"insufficient_authorization"`. |
+| `auth_session` | REQUIRED | Session identifier that MUST be included in all subsequent Authorization Challenge Requests for this context. |
+| `elicitations` | REQUIRED | Array of elicitation objects. Each entry contains `mode`, `message`, and (for `"form"` mode) `requestedSchema`. See the Appendix for authenticator-specific schema examples. |
+
+~~~ http
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+  "error": "insufficient_authorization",
+  "auth_session": "<session-identifier>",
+  "elicitations": [
+    {
+      "mode": "form",
+      "message": "<human-readable prompt>",
+      "requestedSchema": { ... }
+    }
+  ]
+}
+~~~
+
+## Authorization Challenge Request
+
+After collecting user input via Structured Elicitation, the agent runtime
+submits an Authorization Challenge Request to the authorization challenge
+endpoint.
+
+| Parameter | Required | Description |
+|---|---|---|
+| `auth_session` | REQUIRED | The session identifier from the preceding Authorization Challenge Response. |
+| `response` | REQUIRED | An object whose fields match the `requestedSchema` advertised in the corresponding `elicitations` entry. |
+
+~~~ http
+POST /as/authorization.oauth2
+Content-Type: application/json
+
+{
+  "auth_session": "<session-identifier>",
+  "response": { ... }
+}
+~~~
+
+On success, the authorization server issues an OAuth token bound to the
+completed `auth_session`, per [FiPA].
+
+# Security Considerations
+
+TBD
+
+# IANA Considerations
+
+TBD
+
+--- back
+
+# Appendix
+
+## Examples
+
+### Authenticator Selection
+
+When additional authentication is required, the first elicitation typically
+presents the available authenticators. The following examples show the FiPA
+wire format for authenticator selection. This specification defines elicitation
+schemas for two authenticator types: Passkey (WebAuthn) and Authenticator App
+(TOTP). Password authentication is outside the scope of this document.
 
 When multiple authenticators are supported, the authorization server returns a
 selection prompt:
@@ -433,6 +452,7 @@ selection prompt:
 ~~~ http
 HTTP/1.1 400 Bad Request
 Content-Type: application/json
+Cache-Control: no-store
 
 {
   "error": "insufficient_authorization",
@@ -460,37 +480,7 @@ Content-Type: application/json
 }
 ~~~
 
-When only one authenticator is supported, the authorization server directly
-requests the required credential without presenting a choice:
-
-~~~ http
-HTTP/1.1 400 Bad Request
-Content-Type: application/json
-
-{
-  "error": "insufficient_authorization",
-  "auth_session": "sess_abc123",
-  "elicitations": [
-    {
-      "mode": "form",
-      "message": "Additional verification is required. Enter your one-time passcode.",
-      "requestedSchema": {
-        "type": "object",
-        "properties": {
-          "totp_code": {
-            "type": "string",
-            "title": "One-Time Passcode",
-            "description": "Enter the 6-digit code from your authenticator app."
-          }
-        },
-        "required": ["totp_code"]
-      }
-    }
-  ]
-}
-~~~
-
-## Authorization Challenge Request
+The agent submits the user's selection:
 
 ~~~ http
 POST /as/authorization.oauth2
@@ -502,16 +492,17 @@ Content-Type: application/json
 }
 ~~~
 
-# TOTP Challenge
+### TOTP Challenge
 
 TOTP uses form mode: the challenge is a 6-digit numeric code, expressible as a
 plain string with `pattern` and length constraints.
 
-## Authorization Challenge Response
+Authorization Challenge Response:
 
 ~~~ http
 HTTP/1.1 400 Bad Request
 Content-Type: application/json
+Cache-Control: no-store
 
 {
   "error": "insufficient_authorization",
@@ -538,7 +529,7 @@ Content-Type: application/json
 }
 ~~~
 
-## Authorization Challenge Request
+Authorization Challenge Request:
 
 ~~~ http
 POST /as/authorization.oauth2
@@ -553,38 +544,29 @@ Content-Type: application/json
 On success, the authorization server issues an OAuth token with the
 authenticated ACR value, per [FiPA].
 
-# Passkey Challenge
+### Passkey Challenge
 
 In a Third-Party AI Agent deployment, the client runtime is a product the
 implementer does not control. It supports standard Structured Elicitation form
 mode and URL mode but cannot be extended with custom format handling or WebAuthn
 API invocation.
+
 For Third-Party AI Agents, URL mode SHOULD be used to redirect the user to a
 browser-based WebAuthn flow. The out-of-band WebAuthn ceremony is outside the
-scope of this specification. 
+scope of this specification.
 
 For in-band Passkey support, a First-Party AI Agent deployment is required.
 The implementer controls the agent code and MAY implement custom elicitation
 handling, including native WebAuthn API invocation using the OS or platform
-FIDO2 APIs ([FIDO-CTAP]). The WebAuthn ceremony is performed in-band: no
-browser, no redirect.
+FIDO2 APIs. The WebAuthn ceremony is performed in-band: no browser, no redirect.
 
-## WebAuthn Challenge Delivery
+#### WebAuthn Challenge Delivery
 
 This section defines how the authorization server delivers WebAuthn challenge
 parameters to the agent through Structured Elicitation form mode.
 
-TODO
+TBD
 
-## Authorization Challenge Response
+#### Authorization Challenge Response
 
-TODO
-
-# Security Considerations
-
-TODO Security
-
-# IANA Considerations
-This document has no IANA actions.
-
---- back
+TBD
