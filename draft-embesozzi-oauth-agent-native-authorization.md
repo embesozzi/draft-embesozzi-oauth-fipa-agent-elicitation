@@ -1,15 +1,28 @@
 ---
 title: "OAuth 2.0 Agents Native Authorization via Structured Elicitation"
 abbrev: "Agent Native Authorization"
-docname: draft-embesozzi-oauth-agent-native-authorization
-date: 2026-03-09
 category: info
+docname: draft-embesozzi-oauth-agent-native-authorization-latest
 submissiontype: independent
-ipr: trust200902
+number:
+date:
+consensus: false
 v: 3
+ipr: trust200902
 
 area: Security
 workgroup: Independent Submission
+
+keyword:
+ - oauth
+ - agent
+ - native authorization
+ - elicitation
+ - ai agents
+
+venue:
+ github: "embesozzi/draft-embesozzi-oauth-agent-native-authorization"
+ latest: "https://embesozzi.github.io/draft-embesozzi-oauth-agent-native-authorization/draft-embesozzi-oauth-agent-native-authorization.html"
 
 author:
   -
