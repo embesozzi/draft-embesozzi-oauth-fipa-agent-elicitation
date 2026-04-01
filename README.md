@@ -30,13 +30,13 @@ executing on behalf of users in Human-to-Agent (H2A) flows.
 
 | Document | Link |
 |----------|------|
-| **Draft** | [draft-oauth-fipa-agent-elicitation.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
+| **Draft** | [draft-oauth-agent-native-authorization.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
 
 ## Versions
 
 | Date | Link |
 |------|------|
-| **Latest** | [Editor's Copy](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
+| **Latest** | [Editor's Copy](https://embesozzi.github.io/draft-embesozzi-oauth-agent-native-authorization/draft-oauth-agent-native-authorization.html) |
 
 ## Contributing
 
