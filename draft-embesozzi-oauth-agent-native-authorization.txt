@@ -9,7 +9,7 @@ Expires: 10 September 2026
 
 
     OAuth 2.0 Agents Native Authorization via Structured Elicitation
-              draft-embesozzi-oauth-fipa-agent-elicitation
+            draft-embesozzi-oauth-agent-native-authorization
 
 Abstract
 
