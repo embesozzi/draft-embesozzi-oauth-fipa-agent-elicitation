@@ -1,7 +1,7 @@
 ---
 title: "OAuth 2.0 Agents Native Authorization via Structured Elicitation"
 abbrev: "Agent Native Authorization"
-docname: draft-embesozzi-oauth-fipa-agent-elicitation
+docname: draft-embesozzi-oauth-agent-native-authorization
 date: 2026-03-09
 category: info
 submissiontype: independent

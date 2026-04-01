@@ -1,6 +1,6 @@
 # OAuth 2.0 Agents Native Authorization via Structured Elicitation
 
-**Document:** `draft-embesozzi-oauth-fipa-agent-elicitation`  
+**Document:** `draft-embesozzi-oauth-agent-native-authorization`  
 **Status:** Individual Submission — Informational  
 **Author:** Martin Besozzi (TwoGenIdentity)  
 **Date:** 2026-04-01
@@ -30,7 +30,7 @@ executing on behalf of users in Human-to-Agent (H2A) flows.
 
 | Document | Link |
 |----------|------|
-| **Draft** | [draft-oauth-agent-native-authorization.html](https://embesozzi.github.io/draft-embesozzi-oauth-fipa-agent-elicitation/draft-oauth-fipa-agent-elicitation.html) |
+| **Draft** | [draft-embesozzi-oauth-agent-native-authorization.html](https://embesozzi.github.io/draft-embesozzi-oauth-agent-native-authorization/draft-embesozzi-oauth-agent-native-authorization.html) |
 
 ## Versions
 
