@@ -500,7 +500,7 @@ Table of Contents
    [MCP-Elicitation]
               Anthropic, "Model Context Protocol Specification —
               Elicitation", n.d.,
-              <https://spec.modelcontextprotocol.io>.
+              <https://modelcontextprotocol.io/specification/>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
