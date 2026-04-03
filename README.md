@@ -31,11 +31,7 @@ executing on behalf of users in Human-to-Agent (H2A) flows.
 | Document | Link |
 |----------|------|
 | **Draft** | [draft-embesozzi-oauth-agent-native-authorization.html](https://embesozzi.github.io/draft-embesozzi-oauth-agent-native-authorization/draft-embesozzi-oauth-agent-native-authorization.html) |
-
-## Versions
-
-| Date | Link |
-|------|------|
+| **Datatracker Page** | [draft-embesozzi-oauth-agent-native-authorization](https://datatracker.ietf.org/doc/draft-embesozzi-oauth-agent-native-authorization/) |
 | **Latest** | [Editor's Copy](https://embesozzi.github.io/draft-embesozzi-oauth-agent-native-authorization/draft-oauth-agent-native-authorization.html) |
 
 ## Contributing
@@ -44,6 +40,21 @@ Feedback is welcome via GitHub Issues or Pull Requests.
 
 ## Author
 
-Martin Besozzi — [TwoGenIdentity](https://twogenidentity.com) —
-embesozzi@twogenidentity.com
+Martin Besozzi — [TwoGenIdentity](https://twogenidentity.com) — embesozzi@twogenidentity.com
+
+---
+
+## Live Demos
+
+### Securing AI Coding Agents with Just-In-Time Authorization with Authenticator: Claude Code and Copilot CLI
+
+[![Demo Video](https://img.youtube.com/vi/9MNMrz8LEH0/0.jpg)](https://youtu.be/9MNMrz8LEH0)
+
+### Passkeys Just-In-Time Authorization for AI agents: In action with Claude Code
+
+[![Demo Video](https://img.youtube.com/vi/2ldvTwteddo/0.jpg)](https://youtu.be/2ldvTwteddo)
+
+
+
+
 
